@@ -8,8 +8,9 @@ namespace Survey.Application.Interfaces
     public interface ISurveyDbContext
     {
         DbSet<Form> Forms { get; set; }
+        DbSet<Section> Sections { get; set; }
         DbSet<Question> Questions { get; set; }
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -5,7 +5,7 @@ namespace Survey.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionController : ControllerBase
+    public class AnswersController : ControllerBase
     {
         // GET api/values
         [HttpGet]

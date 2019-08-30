@@ -6,8 +6,10 @@ namespace Survey.Domain.Survey
     public class Response : Entity
     {
         public int UserId { get; set; }
+        public int FormId { get; set; }
 
         public User User { get; set; }
+        public Form Form { get; set; }
 
         public IEnumerable<ResponseOption> ResponseOptions { get; set; }
     }

@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{6C01ACB3-6862-428E-977F-4F981F2F191E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{5D68B8BC-D29C-4230-9CF3-E6A52F94B1DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Survey.UnitTest", "Survey.UnitTest\Survey.UnitTest.csproj", "{AB64B12C-C35F-4B5A-A92E-5272F366B98D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +45,10 @@ Global
 		{7E621345-4BD8-4878-B3F0-38A409BD1CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E621345-4BD8-4878-B3F0-38A409BD1CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E621345-4BD8-4878-B3F0-38A409BD1CAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB64B12C-C35F-4B5A-A92E-5272F366B98D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB64B12C-C35F-4B5A-A92E-5272F366B98D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB64B12C-C35F-4B5A-A92E-5272F366B98D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB64B12C-C35F-4B5A-A92E-5272F366B98D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +58,7 @@ Global
 		{EFDB8099-84DD-4B08-8A81-474FC5EF2E84} = {1BA0CD86-A97D-4138-AE07-569EE09B3F5F}
 		{BD9BE72C-CAEF-416A-BE55-75B2CC863E1E} = {04B4353A-93A4-443F-88BE-1DD87936B156}
 		{7E621345-4BD8-4878-B3F0-38A409BD1CAE} = {1BA0CD86-A97D-4138-AE07-569EE09B3F5F}
+		{AB64B12C-C35F-4B5A-A92E-5272F366B98D} = {5D68B8BC-D29C-4230-9CF3-E6A52F94B1DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1FC2C8D9-08C7-4C48-9C9D-6EACAF340DF5}

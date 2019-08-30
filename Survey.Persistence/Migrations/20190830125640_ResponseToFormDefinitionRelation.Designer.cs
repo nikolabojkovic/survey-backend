@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Survey.Persistence;
 
 namespace Survey.Persistence.Migrations
 {
     [DbContext(typeof(SurveyDbContext))]
-    partial class SurveyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190830125640_ResponseToFormDefinitionRelation")]
+    partial class ResponseToFormDefinitionRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

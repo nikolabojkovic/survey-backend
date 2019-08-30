@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Survey.Application.Interfaces;
+using Survey.Extensions;
 using Survey.Persistence;
+using System;
 
 namespace Survey
 {
@@ -26,6 +29,11 @@ namespace Survey
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // register mapper
+            Mapper.Initialize(cfg =>
+                cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies()));
+
+            services.AddSwagger();
             services.AddCors(options => {
                 options.AddPolicy("AllowAllOrigins",
                     builder =>
@@ -53,6 +61,8 @@ namespace Survey
             {
                 app.UseHsts();
             }
+            
+            app.UseSwaggerDocumentation();
 
             // app.UseHttpsRedirection();
             app.UseCors("AllowAllOrigins");

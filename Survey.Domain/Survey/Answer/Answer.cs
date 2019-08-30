@@ -9,6 +9,6 @@ namespace Survey.Domain.Survey
         public int QuestionId { get; set; }
 
         public Question Question { get; set; }
-        public IEnumerable<Option> Options { get; set; }
+        public ICollection<Option> Options { get; set; }
     }
 }

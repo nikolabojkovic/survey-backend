@@ -9,7 +9,7 @@ namespace Survey.Domain.Survey
             Type = QuestionType.Short;
             Answer = new Answer
             {
-                Options = new List<TextOption>
+                Options = new List<Option>
                 {
                     new TextOption { Type = OptionType.Text }
                 }

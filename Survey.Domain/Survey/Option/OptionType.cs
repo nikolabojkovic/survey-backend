@@ -8,7 +8,7 @@ namespace Survey.Domain.Survey
     {
         Text,
         Number,
-        Cehckbox,
+        CehckBox,
         RadioButton,
         DropDownItem,
         DateTime,

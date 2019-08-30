@@ -16,6 +16,9 @@ namespace Survey.Persistence.Configurations
             builder.HasOne(t => t.User)
                    .WithMany(t => t.Responses)
                    .HasForeignKey(t => t.UserId);
+            builder.HasOne(t => t.Form)
+                   .WithMany(t => t.Responses)
+                   .HasForeignKey(t => t.FormId);
         }
     }
 }

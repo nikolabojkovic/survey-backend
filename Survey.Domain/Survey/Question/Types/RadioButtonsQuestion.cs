@@ -9,7 +9,7 @@ namespace Survey.Domain.Survey
             Type = QuestionType.SingleChoice;
             Answer = new Answer
             {
-                Options = new List<RadioButtonOption>
+                Options = new List<Option>
                 {
                     new RadioButtonOption { Name = "Option 1", Type = OptionType.RadioButton },
                     new RadioButtonOption { Name = "Option 2", Type = OptionType.RadioButton },

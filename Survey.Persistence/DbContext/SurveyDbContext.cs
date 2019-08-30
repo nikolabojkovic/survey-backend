@@ -14,7 +14,8 @@ namespace Survey.Persistence
         }
 
         public DbSet<Form> Forms { get; set; }
-        public DbSet<Question> Questions { get ; set; }       
+        public DbSet<Question> Questions { get ; set; }
+        public DbSet<Section> Sections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
