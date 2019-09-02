@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Survey.Application.Interfaces;
 using Survey.Domain.Survey;
+using Survey.Domain.Users;
 using Survey.Persistence.Configurations;
 
 namespace Survey.Persistence
@@ -16,6 +17,8 @@ namespace Survey.Persistence
         public DbSet<Form> Forms { get; set; }
         public DbSet<Question> Questions { get ; set; }
         public DbSet<Section> Sections { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<QuestionResponse> QuestionResponses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,15 +33,14 @@ namespace Survey.Persistence
 
             modelBuilder.ApplyConfiguration(new AnswerConfiguration());
 
-            modelBuilder.ApplyConfiguration(new OptionConfiguration());
-            modelBuilder.ApplyConfiguration(new TextOptionConfiguration());
-            modelBuilder.ApplyConfiguration(new CheckBoxOptionConfiguration());
-            modelBuilder.ApplyConfiguration(new RadioButtonOptionConfiguration());
+            modelBuilder.ApplyConfiguration(new AnswerConfiguration());
+            modelBuilder.ApplyConfiguration(new TextAnswerConfiguration());
+            modelBuilder.ApplyConfiguration(new CheckBoxAnswerConfiguration());
+            modelBuilder.ApplyConfiguration(new RadioButtonAnswerConfiguration());
 
-            modelBuilder.ApplyConfiguration(new ResponseConfiguration());
-            modelBuilder.ApplyConfiguration(new ResponseOptionConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionResponseConfiguration());
             modelBuilder.ApplyConfiguration(new ResponseTextOptionConfiguration());
-            modelBuilder.ApplyConfiguration(new ResponseCheckBoxOptionConfiguration());
+            modelBuilder.ApplyConfiguration(new CehckboxQuestionResponseConfiguration());
             modelBuilder.ApplyConfiguration(new ResponseRadioButtonOptionConfiguration());
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());

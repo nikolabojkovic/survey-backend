@@ -13,7 +13,7 @@ namespace Survey.Domain.Survey
         
         public ICollection<Section> Sections { get; private set; }
         public ICollection<FormUser> FormUsers { get; private set; }
-        public ICollection<Response> Responses { get; private set; }
+        public ICollection<QuestionResponse> QuestionResponses { get; private set; }
 
         public static Form Create(string name, string descripion)
         {

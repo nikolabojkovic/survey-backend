@@ -11,6 +11,7 @@ namespace Survey.Domain.Survey
         public QuestionType Type { get; protected set; }
 
         public ICollection<SectionQuestion> QuestionSections { get; protected set; }
-        public Answer Answer { get; protected set; } 
+        public ICollection<QuestionResponse> QuestionResponses { get; protected set; }
+        public ICollection<Answer> Answers { get; set; }
     }
 }

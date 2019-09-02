@@ -36,12 +36,26 @@ namespace Survey.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] QusetionInputModel questionInputModel)
         {
-            var question = CheckBoxesQuestion.Create(questionInputModel.SectionId,
+            var checkBoxQuestion = CheckBoxesQuestion.Create(questionInputModel.SectionId,
                                                      questionInputModel.Text,
                                                      questionInputModel.Description,
                                                      questionInputModel.IsRequired,
                                                      questionInputModel.CustomErrorMessage);
-            await _dbContext.Questions.AddAsync(question);
+            await _dbContext.Questions.AddAsync(checkBoxQuestion);
+
+            var radioButtonQuestion = RadioButtonsQuestion.Create(questionInputModel.SectionId,
+                                                     questionInputModel.Text,
+                                                     questionInputModel.Description,
+                                                     questionInputModel.IsRequired,
+                                                     questionInputModel.CustomErrorMessage);
+            await _dbContext.Questions.AddAsync(radioButtonQuestion);
+
+            var shortQuestion = ShortQuestion.Create(questionInputModel.SectionId,
+                                                     questionInputModel.Text,
+                                                     questionInputModel.Description,
+                                                     questionInputModel.IsRequired,
+                                                     questionInputModel.CustomErrorMessage);
+            await _dbContext.Questions.AddAsync(shortQuestion);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();

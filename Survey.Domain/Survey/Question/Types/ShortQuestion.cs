@@ -4,16 +4,30 @@ namespace Survey.Domain.Survey
 {
     public class ShortQuestion : Question
     {
-        public ShortQuestion()
+        private ShortQuestion()
         {
-            Type = QuestionType.Short;
-            Answer = new Answer
+            
+        }
+
+        public static ShortQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage)
+        {
+            var question = new ShortQuestion
             {
-                Options = new List<Option>
+                Type = QuestionType.Short,
+                Text = text,
+                Description = description,
+                IsRequired = isReqired,
+                CustomErrorMessage = customErrorMessage,
+                Answers = new List<Answer>
                 {
-                    new TextOption { Type = OptionType.Text }
-                }
+                    new TextAnswer { }
+                },
+                QuestionSections = new List<SectionQuestion>()
             };
+            
+            question.QuestionSections.Add(new SectionQuestion { QuestionId = question.Id, SectionId = sectionId });
+
+            return question;
         }
     }
 }

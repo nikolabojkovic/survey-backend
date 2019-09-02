@@ -4,28 +4,42 @@ namespace Survey.Domain.Survey
 {
     public class RadioButtonsQuestion : Question
     {
-        public RadioButtonsQuestion()
+        private RadioButtonsQuestion()
         {
-            Type = QuestionType.SingleChoice;
-            Answer = new Answer
+     
+        }
+
+        public static RadioButtonsQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage)
+        {
+            var question = new RadioButtonsQuestion
             {
-                Options = new List<Option>
+                Type = QuestionType.SingleChoice,
+                Text = text,
+                Description = description,
+                IsRequired = isReqired,
+                CustomErrorMessage = customErrorMessage,
+                Answers = new List<Answer>
                 {
-                    new RadioButtonOption { Name = "Option 1", Type = OptionType.RadioButton },
-                    new RadioButtonOption { Name = "Option 2", Type = OptionType.RadioButton },
-                    new RadioButtonOption { Name = "Option 3", Type = OptionType.RadioButton }
-                }
+                    new RadioButtonAnswer { Name = "Option 1" },
+                    new RadioButtonAnswer { Name = "Option 2" },
+                    new RadioButtonAnswer { Name = "Option 3" }
+                },
+                QuestionSections = new List<SectionQuestion>()
             };
+
+            question.QuestionSections.Add(new SectionQuestion { QuestionId = question.Id, SectionId = sectionId });
+
+            return question;
         }
 
-        public void AddOption(Option option)
+        public void AddOption(Answer option)
         {
-            (Answer.Options as List<Option>).Add(option);
+            Answers.Add(option);
         }
 
-        public void RemoveOption(Option option)
+        public void RemoveOption(Answer option)
         {
-            (Answer.Options as List<Option>).Remove(option);
+            Answers.Remove(option);
         }
     }
 }

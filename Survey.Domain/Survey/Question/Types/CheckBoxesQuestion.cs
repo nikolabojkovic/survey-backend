@@ -4,14 +4,19 @@ namespace Survey.Domain.Survey
 {
     public class CheckBoxesQuestion : Question
     {
-        public void AddOption(Option option)
+        private CheckBoxesQuestion()
         {
-            (Answer.Options as List<Option>).Add(option);
+
         }
 
-        public void RemoveOption(Option option)
+        public void AddOption(Answer option)
         {
-            (Answer.Options as List<Option>).Remove(option);
+            Answers.Add(option);
+        }
+
+        public void RemoveOption(Answer option)
+        {
+            Answers.Remove(option);
         }
 
         public static CheckBoxesQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage)
@@ -23,15 +28,13 @@ namespace Survey.Domain.Survey
                 Description = description,
                 IsRequired = isReqired,
                 CustomErrorMessage = customErrorMessage,
-                Answer = new Answer
+                Answers = new List<Answer>
                 {
-                    Options = new List<Option>
-                    {
-                        new CheckBoxOption { Name = "Options 1", Type = OptionType.CehckBox },
-                        new CheckBoxOption { Name = "Options 2", Type = OptionType.CehckBox },
-                        new CheckBoxOption { Name = "Options 3", Type = OptionType.CehckBox }
-                    }
+                    new CheckBoxAnswer { Name = "Options 1" },
+                    new CheckBoxAnswer { Name = "Options 2" },
+                    new CheckBoxAnswer { Name = "Options 3" }
                 },
+                QuestionSections = new List<SectionQuestion>()
             };
 
             question.QuestionSections.Add(new SectionQuestion { QuestionId = question.Id, SectionId = sectionId });

@@ -13,9 +13,9 @@ namespace Survey.Persistence.Configurations
             builder.Property(t => t.Text)
                    .IsRequired()
                    .HasMaxLength(250);
-            builder.HasOne(t => t.Answer)
+            builder.HasMany(t => t.Answers)
                    .WithOne(t => t.Question)
-                   .HasForeignKey<Answer>(t => t.QuestionId);
+                   .HasForeignKey(t => t.QuestionId);
         }
     }
 }

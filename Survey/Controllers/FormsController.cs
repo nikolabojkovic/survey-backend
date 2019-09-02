@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Survey.Application;
 using Survey.Application.Interfaces;
+using Survey.Application.Results.Survey;
+using Survey.Application.Strategy;
 using Survey.Domain.Survey;
 using Survey.Domain.Users;
 
@@ -14,11 +17,13 @@ namespace Survey.Controllers
     [ApiController]
     public class FormsController : ControllerBase
     {
-        private ISurveyDbContext _dbContext;
+        private readonly ISurveyDbContext _dbContext;
+        private readonly IQuestionResponseStrategy _questionResponseStrategy;
 
-        public FormsController(ISurveyDbContext dbContext)
+        public FormsController(ISurveyDbContext dbContext, IQuestionResponseStrategy questionResponseStrategy)
         {
             _dbContext = dbContext;
+            _questionResponseStrategy = questionResponseStrategy;
         }
 
         // GET api/values
@@ -30,8 +35,7 @@ namespace Survey.Controllers
                                         .Include(x => x.Sections)
                                             .ThenInclude(x => x.SectionQuestions)
                                                 .ThenInclude(x => x.Question)
-                                                    .ThenInclude(x => x.Answer)
-                                                        .ThenInclude(x => x.Options)
+                                                    .ThenInclude(x => x.Answers)
                                         .ToListAsync();
 
             return Ok(Mapper.Map<IEnumerable<FormViewModel>>(forms));
@@ -51,6 +55,33 @@ namespace Survey.Controllers
         public async Task<IActionResult> Post([FromBody] FormInputModel formInputModel)
         {
             await _dbContext.Forms.AddAsync(Form.Create(formInputModel.Name, formInputModel.Description));
+            await _dbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // POST api/values
+        [HttpPost("{id}/responses")]
+        public async Task<IActionResult> PostResponses(int id, [FromBody] SurveyResultsInputModel results)
+        {
+            var responses = new List<QuestionResponse>();
+            var questionResults = results.QuestionResults.SelectMany(questionResult => questionResult.QuestionReponses.Select(questionResponse => questionResponse));
+
+            foreach (var questionResult in results.QuestionResults)
+            {
+                foreach (var questionResponse in questionResult.QuestionReponses)
+                    responses.Add(_questionResponseStrategy.GetQuestionType(_dbContext.Questions
+                                                                                      .Where(q => q.Id == questionResult.QuestionId)
+                                                                                      .Select(q => q.Type)
+                                                                                      .FirstOrDefault()).GetQuestionResponse(id,
+                                                                                                                             results.UserId,
+                                                                                                                             questionResult.QuestionId,
+                                                                                                                             questionResponse.Text,
+                                                                                                                             true,
+                                                                                                                             questionResponse.Name));
+            }
+
+            await _dbContext.QuestionResponses.AddRangeAsync(responses);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();

@@ -10,9 +10,9 @@ namespace Survey.Persistence.Configurations
         {
             builder.ToTable("Answers");
             builder.HasKey(t => t.Id);
-            builder.HasMany(t => t.Options)
-                   .WithOne(t => t.Answer)
-                   .HasForeignKey(t => t.AnswerId);
+            builder.HasOne(t => t.Question)
+                   .WithMany(t => t.Answers)
+                   .HasForeignKey(t => t.QuestionId);
         }
     }
 }

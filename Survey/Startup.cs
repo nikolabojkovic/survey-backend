@@ -6,9 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Survey.Application.Interfaces;
+using Survey.Application.Strategy;
+using Survey.Domain.Survey;
 using Survey.Extensions;
 using Survey.Persistence;
 using System;
+using System.Reflection;
 
 namespace Survey
 {
@@ -29,9 +32,19 @@ namespace Survey
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // stragety registration
+
+            services.AddScoped<IQuestionResponseStrategy, QuestionResponseStrategy>();
+            services.AddScoped<IQuestionResponseType, CehckBoxQuestionResponse>();
+            services.AddScoped<IQuestionResponseType, TextQuestionResponse>();
+            services.AddScoped<IQuestionResponseType, RadioButtonQuestionResponse>();
+
             // register mapper
             Mapper.Initialize(cfg =>
-                cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies()));
+                cfg.AddMaps(new Assembly[] {
+                    Assembly.Load("Survey.Domain"),
+                    Assembly.Load("Survey.Application")
+                }));
 
             services.AddSwagger();
             services.AddCors(options => {

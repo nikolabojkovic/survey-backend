@@ -4,25 +4,26 @@ using System.Linq;
 
 namespace Survey.Application
 {
-    public class UserRoleProfile : Profile
+    public class FormProfile : Profile
     {
-        public UserRoleProfile()
+        public FormProfile()
         {
             CreateMap<Form, FormViewModel>();
             CreateMap<Section, SectionViewModel>()
                 .ForMember(m => m.Questions, opt => opt.MapFrom(src => src.SectionQuestions.Select(x => x.Question)));
 
             CreateMap<Question, QuestionViewModel>();
-            CreateMap<CheckBoxesQuestion, QuestionViewModel>();
-            CreateMap<RadioButtonsQuestion, QuestionViewModel>();
-            CreateMap<ShortQuestion, QuestionViewModel>();
 
             CreateMap<Answer, AnswerViewModel>();
 
-            CreateMap<Option, OptionViewModel>();
-            CreateMap<TextOption, OptionViewModel>();
-            CreateMap<CheckBoxOption, OptionViewModel>();
-            CreateMap<RadioButtonOption, OptionViewModel>();
+            CreateMap<Answer, AnswerViewModel>()
+                .Include<TextAnswer, TextAnswerViewModel>()
+                .Include<CheckBoxAnswer, CheckBoxAnswerViewModel>()
+                .Include<RadioButtonAnswer, RadioButtonAnswerViewModel>();
+
+            CreateMap<TextAnswer, TextAnswerViewModel>();
+            CreateMap<CheckBoxAnswer, CheckBoxAnswerViewModel>();
+            CreateMap<RadioButtonAnswer, RadioButtonAnswerViewModel>();
         }
     }
 }
