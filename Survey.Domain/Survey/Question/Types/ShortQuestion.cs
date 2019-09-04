@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Survey.Domain.Survey
 {
@@ -20,7 +21,7 @@ namespace Survey.Domain.Survey
                 CustomErrorMessage = customErrorMessage,
                 Answers = new List<Answer>
                 {
-                    new TextAnswer { }
+                    new TextAnswer { CreateAt = DateTime.Now, ModifiedAt = DateTime.Now }
                 },
                 QuestionSections = new List<SectionQuestion>()
             };

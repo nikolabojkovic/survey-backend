@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Survey.Application.Interfaces;
 using Survey.Domain.Survey;
+using Survey.Domain.Survey.Result;
 using Survey.Domain.Users;
 using Survey.Persistence.Configurations;
 
@@ -19,6 +21,18 @@ namespace Survey.Persistence
         public DbSet<Section> Sections { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<QuestionResponse> QuestionResponses { get; set; }
+        public DbSet<RadioButtonQuestionResponse> RadioButtonQuestionResponses { get; set; }
+        public DbSet<CheckBoxQuestionResponse> CheckBoxQuestionResponses { get; set; }
+        public DbSet<TextQuestionResponse> TextQuestionResponses { get; set; }
+        public DbSet<SurveyResult> SurveyResults { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+                //optionsBuilder.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
+                // optionsBuilder.EnableSensitiveDataLogging();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

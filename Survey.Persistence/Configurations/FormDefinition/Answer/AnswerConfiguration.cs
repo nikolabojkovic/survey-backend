@@ -10,6 +10,8 @@ namespace Survey.Persistence.Configurations
         {
             builder.ToTable("Answers");
             builder.HasKey(t => t.Id);
+            builder.Property(t => t.CreateAt).IsRequired();
+            builder.Property(t => t.ModifiedAt).IsRequired();
             builder.HasOne(t => t.Question)
                    .WithMany(t => t.Answers)
                    .HasForeignKey(t => t.QuestionId);

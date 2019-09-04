@@ -10,6 +10,9 @@ namespace Survey.Domain.Survey
         public int QuestionId { get; set; }
         public Question Question { get; set; }
 
+        public DateTime CreateAt { get; set; }
+        public DateTime ModifiedAt { get; set; }
+
         public virtual object GetValue()
         {
             throw new NotImplementedException();

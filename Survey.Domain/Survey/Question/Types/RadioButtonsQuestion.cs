@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Survey.Domain.Survey
 {
@@ -9,7 +10,7 @@ namespace Survey.Domain.Survey
      
         }
 
-        public static RadioButtonsQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage)
+        public static RadioButtonsQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage, bool hasOtherOption)
         {
             var question = new RadioButtonsQuestion
             {
@@ -20,9 +21,9 @@ namespace Survey.Domain.Survey
                 CustomErrorMessage = customErrorMessage,
                 Answers = new List<Answer>
                 {
-                    new RadioButtonAnswer { Name = "Option 1" },
-                    new RadioButtonAnswer { Name = "Option 2" },
-                    new RadioButtonAnswer { Name = "Option 3" }
+                    new RadioButtonAnswer { Name = "Option 1", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now },
+                    new RadioButtonAnswer { Name = "Option 2", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now },
+                    new RadioButtonAnswer { Name = "Option 3", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now }
                 },
                 QuestionSections = new List<SectionQuestion>()
             };

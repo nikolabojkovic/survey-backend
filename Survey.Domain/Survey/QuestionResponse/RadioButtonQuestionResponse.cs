@@ -1,28 +1,30 @@
 ﻿using Survey.Application.Strategy;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Survey.Domain.Survey
 {
     public class RadioButtonQuestionResponse : QuestionResponse, IQuestionResponseType
     {
+        public RadioButtonQuestionResponse() { }
+
         public string Name { get; set; }
         public bool IsSelected { get; private set; }
+        public string OtherText { get; set; }
 
         [NotMapped]
         public QuestionType Type => QuestionType.SingleChoice;
 
-        public QuestionResponse GetQuestionResponse(int formId, int userId, int questionId, string text, bool isSelected, string name)
+        public QuestionResponse Create(int surveyResultId, int userId, int questionId, string text, bool isSelected, string name, string otherText, DateTime createdAt)
         {
             return new RadioButtonQuestionResponse
             {
                 UserId = userId,
-                FormId = formId,
+                SurveyResultId = surveyResultId,
                 QuestionId = questionId,
                 Name = name,
-                IsSelected = isSelected
+                IsSelected = isSelected,
+                CreateAt = createdAt
             };
         }
     }

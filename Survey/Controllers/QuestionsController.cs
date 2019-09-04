@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Survey.Application;
 using Survey.Application.Interfaces;
 using Survey.Domain.Survey;
@@ -18,36 +18,24 @@ namespace Survey.Controllers
             _dbContext = dbContext;
         }
 
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] QusetionInputModel questionInputModel)
         {
+            // TODO: Add strategy here
             var checkBoxQuestion = CheckBoxesQuestion.Create(questionInputModel.SectionId,
                                                      questionInputModel.Text,
                                                      questionInputModel.Description,
                                                      questionInputModel.IsRequired,
-                                                     questionInputModel.CustomErrorMessage);
+                                                     questionInputModel.CustomErrorMessage,
+                                                     false);
             await _dbContext.Questions.AddAsync(checkBoxQuestion);
 
             var radioButtonQuestion = RadioButtonsQuestion.Create(questionInputModel.SectionId,
                                                      questionInputModel.Text,
                                                      questionInputModel.Description,
                                                      questionInputModel.IsRequired,
-                                                     questionInputModel.CustomErrorMessage);
+                                                     questionInputModel.CustomErrorMessage,
+                                                     false);
             await _dbContext.Questions.AddAsync(radioButtonQuestion);
 
             var shortQuestion = ShortQuestion.Create(questionInputModel.SectionId,
@@ -61,16 +49,16 @@ namespace Survey.Controllers
             return NoContent();
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] QusetionInputModel questionUpdateModel)
         {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var question = await _dbContext.Questions.FirstOrDefaultAsync(x => x.Active && x.Id == id);
+            question.Update(questionUpdateModel.Text,
+                            questionUpdateModel.Description,
+                            questionUpdateModel.IsRequired,
+                            questionUpdateModel.CustomErrorMessage);
+            _dbContext.Questions.Update(question); 
+            return NoContent();
         }
     }
 }

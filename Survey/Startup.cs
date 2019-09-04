@@ -35,7 +35,7 @@ namespace Survey
             // stragety registration
 
             services.AddScoped<IQuestionResponseStrategy, QuestionResponseStrategy>();
-            services.AddScoped<IQuestionResponseType, CehckBoxQuestionResponse>();
+            services.AddScoped<IQuestionResponseType, CheckBoxQuestionResponse>();
             services.AddScoped<IQuestionResponseType, TextQuestionResponse>();
             services.AddScoped<IQuestionResponseType, RadioButtonQuestionResponse>();
 

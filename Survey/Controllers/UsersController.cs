@@ -19,7 +19,6 @@ namespace Survey.Controllers
             _dbContext = dbContext;
         }
 
-        // GET api/values
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -31,14 +30,6 @@ namespace Survey.Controllers
             return Ok(Mapper.Map<IEnumerable<UserViewModel>>(users));
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
         [HttpPost]
         public async Task Post([FromBody] UserInputModel userInputModel)
         {
@@ -51,18 +42,6 @@ namespace Survey.Controllers
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

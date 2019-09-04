@@ -8,5 +8,6 @@ namespace Survey.Application.Results.Survey
     {
         public string Text { get; set; }
         public string Name { get; set; }
+        public string OtherText { get; set; }
     }
 }

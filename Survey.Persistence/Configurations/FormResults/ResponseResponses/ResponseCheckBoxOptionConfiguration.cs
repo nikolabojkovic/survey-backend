@@ -4,11 +4,11 @@ using Survey.Domain.Survey;
 
 namespace Survey.Persistence.Configurations
 {
-    public class CehckboxQuestionResponseConfiguration : IEntityTypeConfiguration<CehckBoxQuestionResponse>
+    public class CehckboxQuestionResponseConfiguration : IEntityTypeConfiguration<CheckBoxQuestionResponse>
     {
-        public void Configure(EntityTypeBuilder<CehckBoxQuestionResponse> builder)
+        public void Configure(EntityTypeBuilder<CheckBoxQuestionResponse> builder)
         {
-            builder.ToTable("CehckBoxQuestionResponses");
+            builder.ToTable("CheckBoxQuestionResponses");
             builder.Property(t => t.Name)
                    .IsRequired()
                    .HasMaxLength(50);

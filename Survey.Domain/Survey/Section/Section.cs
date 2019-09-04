@@ -24,7 +24,7 @@ namespace Survey.Domain.Survey
 
         public Section AddQuestion()
         {
-            var sectionQuestion = new SectionQuestion { SectionId = Id, Question = CheckBoxesQuestion.Create(Id, "Choose one of three", "Multiple choice question", false, string.Empty) };
+            var sectionQuestion = new SectionQuestion { SectionId = Id, Question = CheckBoxesQuestion.Create(Id, "Choose one of three", "Multiple choice question", false, string.Empty, false) };
             SectionQuestions.Add(sectionQuestion);
 
             return this;

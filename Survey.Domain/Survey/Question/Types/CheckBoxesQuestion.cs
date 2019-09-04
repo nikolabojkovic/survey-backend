@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Survey.Domain.Survey
 {
@@ -19,7 +20,7 @@ namespace Survey.Domain.Survey
             Answers.Remove(option);
         }
 
-        public static CheckBoxesQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage)
+        public static CheckBoxesQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage, bool hasOtherOption)
         {
             var question = new CheckBoxesQuestion
             {
@@ -30,9 +31,9 @@ namespace Survey.Domain.Survey
                 CustomErrorMessage = customErrorMessage,
                 Answers = new List<Answer>
                 {
-                    new CheckBoxAnswer { Name = "Options 1" },
-                    new CheckBoxAnswer { Name = "Options 2" },
-                    new CheckBoxAnswer { Name = "Options 3" }
+                    new CheckBoxAnswer { Name = "Options 1", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now },
+                    new CheckBoxAnswer { Name = "Options 2", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now },
+                    new CheckBoxAnswer { Name = "Options 3", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now }
                 },
                 QuestionSections = new List<SectionQuestion>()
             };

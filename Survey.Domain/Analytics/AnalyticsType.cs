@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Survey.Domain.Analytics
 {
-    public enum AnaliticsType
+    public enum AnalyticsType
     {
         Individual,
         Summary
