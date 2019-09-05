@@ -22,14 +22,6 @@ namespace Survey.Domain.Survey
             };
         }
 
-        public Section AddQuestion()
-        {
-            var sectionQuestion = new SectionQuestion { SectionId = Id, Question = CheckBoxesQuestion.Create(Id, "Choose one of three", "Multiple choice question", false, string.Empty, false) };
-            SectionQuestions.Add(sectionQuestion);
-
-            return this;
-        }
-
         public Section AddQuestion(int questionId)
         {
             var sectionQuestion = new SectionQuestion { SectionId = Id, QuestionId = questionId };

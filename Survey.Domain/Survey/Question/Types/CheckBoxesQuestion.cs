@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Survey.Application.Strategy;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Survey.Domain.Survey
 {
-    public class CheckBoxesQuestion : Question
+    public class CheckBoxesQuestion : Question, IQuestionType
     {
-        private CheckBoxesQuestion()
-        {
+        public CheckBoxesQuestion() { }
 
-        }
+        public override QuestionType Type { get => QuestionType.MultipleChoice; protected set { } }
 
         public void AddOption(Answer option)
         {
@@ -20,21 +21,15 @@ namespace Survey.Domain.Survey
             Answers.Remove(option);
         }
 
-        public static CheckBoxesQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage, bool hasOtherOption)
+        public Question Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage, bool hasOtherOption, IEnumerable<string> names)
         {
             var question = new CheckBoxesQuestion
             {
-                Type = QuestionType.MultipleChoice,
                 Text = text,
                 Description = description,
                 IsRequired = isReqired,
                 CustomErrorMessage = customErrorMessage,
-                Answers = new List<Answer>
-                {
-                    new CheckBoxAnswer { Name = "Options 1", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now },
-                    new CheckBoxAnswer { Name = "Options 2", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now },
-                    new CheckBoxAnswer { Name = "Options 3", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now }
-                },
+                Answers = names.Select(name => new CheckBoxAnswer { Name = name, CreateAt = DateTime.Now, ModifiedAt = DateTime.Now }).ToArray(),
                 QuestionSections = new List<SectionQuestion>()
             };
 

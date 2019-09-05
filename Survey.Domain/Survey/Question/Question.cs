@@ -4,11 +4,13 @@ namespace Survey.Domain.Survey
 {
     public class Question : Entity
     {
+        protected Question() { }
+
         public string Text { get; protected set; }
         public string Description { get; protected set; }
         public bool IsRequired { get; protected set; }
         public string CustomErrorMessage { get; protected set; }
-        public QuestionType Type { get; protected set; }
+        public virtual QuestionType Type { get; protected set; }
 
         public ICollection<SectionQuestion> QuestionSections { get; protected set; }
         public ICollection<QuestionResponse> QuestionResponses { get; protected set; }

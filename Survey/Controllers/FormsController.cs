@@ -22,11 +22,15 @@ namespace Survey.Controllers
     {
         private readonly ISurveyDbContext _dbContext;
         private readonly IQuestionResponseStrategy _questionResponseStrategy;
+        private readonly IAnalyticsStrategy _analyticsStrategy;
 
-        public FormsController(ISurveyDbContext dbContext, IQuestionResponseStrategy questionResponseStrategy)
+        public FormsController(ISurveyDbContext dbContext,
+                               IQuestionResponseStrategy questionResponseStrategy,
+                               IAnalyticsStrategy analyticsStrategy)
         {
             _dbContext = dbContext;
             _questionResponseStrategy = questionResponseStrategy;
+            _analyticsStrategy = analyticsStrategy;
         }
 
         // GET api/values
@@ -113,71 +117,15 @@ namespace Survey.Controllers
         // PUT api/values/5
         [HttpGet("{id}/result/{surveyResultId}/analytics/summary")]
         public async Task<IActionResult> GetAnalytics(int id, int surveyResultId)
-        {
-            var textResponses = await _dbContext.TextQuestionResponses
-                                                .Include(x => x.Question)
-                                                .Include(x => x.SurveyResult)
-                                                .Where(x => x.SurveyResult.FormId == id &&
-                                                            x.SurveyResultId == surveyResultId &&
-                                                            x.Question.Type == QuestionType.Short &&
-                                                            x.Active)
-                                                .GroupBy(x => new { x.Question.Id, QuestionText = x.Question.Text })
-                                                .Select(x => new AnalyticsQuestionViewModel
-                                                {
-                                                    Text = x.Key.QuestionText,
-                                                    QuestionType = QuestionType.Short,
-                                                    ResponseCount = x.Count(),
-                                                    Responses = x.Select(r => new AnalyticsTextResponseViewModel
-                                                    {
-                                                        Text = r.Text,
-                                                    })
-                                                })
-                                                .ToListAsync();
-
-            var radioButtonResponses = await _dbContext.RadioButtonQuestionResponses
-                                                       .Select(x => new { x.Question, x.SurveyResult.FormId, SurveyResultId = x.SurveyResult.Id, x.Active, x.Name })
-                                                       .Where(x => x.FormId == id &&
-                                                                   x.SurveyResultId == surveyResultId &&
-                                                                   x.Question.Type == QuestionType.SingleChoice &&
-                                                                   x.Active)
-                                                       .GroupBy(x => new { QuestionId = x.Question.Id, QuestionText = x.Question.Text, QuestionType = x.Question.Type })
-                                                       .Select(g => new AnalyticsQuestionViewModel
-                                                       {
-                                                           Text = g.Key.QuestionText,
-                                                           QuestionType = g.Key.QuestionType,
-                                                           ResponseCount = g.Count(),
-                                                           Responses = g.Select(r => r.Name).Distinct().Select(name => new AnalyticsSelectResponseViewModel
-                                                           {
-                                                               Name = name,
-                                                               Percentage = Convert.ToDecimal(g.Count(x => x.Name == name)) / g.Count() * 100
-                                                           })
-                                                       })
-                                                       .ToListAsync();
-
-            var cehckBoxResponses = await _dbContext.CheckBoxQuestionResponses
-                                                     .Select(x => new { x.Question, x.SurveyResult.FormId, SurveyResultId = x.SurveyResult.Id, x.Active, x.Name })
-                                                             .Where(x => x.FormId == id &&
-                                                                    x.SurveyResultId == surveyResultId &&
-                                                                    x.Question.Type == QuestionType.MultipleChoice &&
-                                                                    x.Active)
-                                                     .GroupBy(x => new { QuestionId = x.Question.Id, QuestionText = x.Question.Text, QuestionType = x.Question.Type })
-                                                     .Select(g => new AnalyticsQuestionViewModel
-                                                     {
-                                                         Text = g.Key.QuestionText,
-                                                         QuestionType = g.Key.QuestionType,
-                                                         ResponseCount = g.Count(),
-                                                         Responses = g.Select(r => r.Name).Distinct().Select(name => new AnalyticsSelectResponseViewModel
-                                                         {
-                                                             Name = name,
-                                                             Percentage = Convert.ToDecimal(g.Count(x => x.Name == name)) / g.Count() * 100
-                                                         }).Distinct()
-                                                     })
-                                                     .ToListAsync();
-
+        {        
             var questions = new List<AnalyticsQuestionViewModel>();
-            questions.AddRange(textResponses);
-            questions.AddRange(radioButtonResponses);
-            questions.AddRange(cehckBoxResponses);
+
+            foreach (QuestionType questionType in Enum.GetValues(typeof(QuestionType)))
+            {
+                var analitycsType = _analyticsStrategy.GetAnalyticsType(questionType);
+                if (analitycsType != null)
+                     questions.AddRange(await analitycsType.GetAnalytics(id, surveyResultId));
+            }
 
             return Ok(new AnalyticsViewModel {
                 FormId = id,

@@ -1,20 +1,19 @@
-﻿using System;
+﻿using Survey.Application.Strategy;
+using System;
 using System.Collections.Generic;
 
 namespace Survey.Domain.Survey
 {
-    public class ShortQuestion : Question
+    public class ShortQuestion : Question, IQuestionType
     {
-        private ShortQuestion()
-        {
-            
-        }
+        public ShortQuestion() { }
 
-        public static ShortQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage)
+        public override QuestionType Type { get => QuestionType.Short; protected set { } }
+
+        public Question Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage, bool hasOtherOption, IEnumerable<string> names)
         {
             var question = new ShortQuestion
             {
-                Type = QuestionType.Short,
                 Text = text,
                 Description = description,
                 IsRequired = isReqired,
@@ -25,7 +24,7 @@ namespace Survey.Domain.Survey
                 },
                 QuestionSections = new List<SectionQuestion>()
             };
-            
+
             question.QuestionSections.Add(new SectionQuestion { QuestionId = question.Id, SectionId = sectionId });
 
             return question;

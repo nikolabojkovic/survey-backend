@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Survey.Application.Analytics.Strategy;
 using Survey.Application.Interfaces;
 using Survey.Application.Strategy;
 using Survey.Domain.Survey;
@@ -34,10 +35,20 @@ namespace Survey
         {
             // stragety registration
 
+            services.AddScoped<IQuestionStrategy, QuestionStrategy>();
+            services.AddScoped<IQuestionType, CheckBoxesQuestion>();
+            services.AddScoped<IQuestionType, ShortQuestion>();
+            services.AddScoped<IQuestionType, RadioButtonsQuestion>();
+
             services.AddScoped<IQuestionResponseStrategy, QuestionResponseStrategy>();
             services.AddScoped<IQuestionResponseType, CheckBoxQuestionResponse>();
             services.AddScoped<IQuestionResponseType, TextQuestionResponse>();
             services.AddScoped<IQuestionResponseType, RadioButtonQuestionResponse>();
+
+            services.AddScoped<IAnalyticsStrategy, AnalyticsStrategy>();
+            services.AddScoped<IAnalyticsType, ShortQuestionAnalytics>();
+            services.AddScoped<IAnalyticsType, SingleChoiceQuestionAnalytics>();
+            services.AddScoped<IAnalyticsType, MultipleChoiceQuestionAnalytics>();
 
             // register mapper
             Mapper.Initialize(cfg =>

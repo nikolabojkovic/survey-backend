@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Survey.Application;
 using Survey.Application.Interfaces;
-using Survey.Domain.Survey;
+using Survey.Application.Strategy;
 
 namespace Survey.Controllers
 {
@@ -12,38 +14,30 @@ namespace Survey.Controllers
     public class QuestionsController : ControllerBase
     {
         private ISurveyDbContext _dbContext;
+        private readonly IQuestionStrategy _questionStrategy;
 
-        public QuestionsController(ISurveyDbContext dbContext)
+        public QuestionsController(ISurveyDbContext dbContext, IQuestionStrategy questionStrategy)
         {
             _dbContext = dbContext;
+            _questionStrategy = questionStrategy;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] QusetionInputModel questionInputModel)
+        public async Task<IActionResult> Post([FromBody] IEnumerable<QusetionInputModel> questionInputModelList)
         {
             // TODO: Add strategy here
-            var checkBoxQuestion = CheckBoxesQuestion.Create(questionInputModel.SectionId,
-                                                     questionInputModel.Text,
-                                                     questionInputModel.Description,
-                                                     questionInputModel.IsRequired,
-                                                     questionInputModel.CustomErrorMessage,
-                                                     false);
-            await _dbContext.Questions.AddAsync(checkBoxQuestion);
-
-            var radioButtonQuestion = RadioButtonsQuestion.Create(questionInputModel.SectionId,
-                                                     questionInputModel.Text,
-                                                     questionInputModel.Description,
-                                                     questionInputModel.IsRequired,
-                                                     questionInputModel.CustomErrorMessage,
-                                                     false);
-            await _dbContext.Questions.AddAsync(radioButtonQuestion);
-
-            var shortQuestion = ShortQuestion.Create(questionInputModel.SectionId,
-                                                     questionInputModel.Text,
-                                                     questionInputModel.Description,
-                                                     questionInputModel.IsRequired,
-                                                     questionInputModel.CustomErrorMessage);
-            await _dbContext.Questions.AddAsync(shortQuestion);
+            foreach(var questionInputModel in questionInputModelList)
+            {
+                await _dbContext.Questions.AddAsync(_questionStrategy.GetQuestionType(questionInputModel.Type)
+                                                                     .Create(questionInputModel.SectionId,
+                                                                             questionInputModel.Text,
+                                                                             questionInputModel.Description,
+                                                                             questionInputModel.IsRequired,
+                                                                             questionInputModel.CustomErrorMessage,
+                                                                             false,
+                                                                             questionInputModel.Answers.Select(x => x.Name)));
+            }
+           
             await _dbContext.SaveChangesAsync();
 
             return NoContent();

@@ -1,37 +1,15 @@
-﻿using System;
+﻿using Survey.Application.Strategy;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Survey.Domain.Survey
 {
-    public class RadioButtonsQuestion : Question
+    public class RadioButtonsQuestion : Question, IQuestionType
     {
-        private RadioButtonsQuestion()
-        {
-     
-        }
+        public RadioButtonsQuestion() { }
 
-        public static RadioButtonsQuestion Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage, bool hasOtherOption)
-        {
-            var question = new RadioButtonsQuestion
-            {
-                Type = QuestionType.SingleChoice,
-                Text = text,
-                Description = description,
-                IsRequired = isReqired,
-                CustomErrorMessage = customErrorMessage,
-                Answers = new List<Answer>
-                {
-                    new RadioButtonAnswer { Name = "Option 1", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now },
-                    new RadioButtonAnswer { Name = "Option 2", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now },
-                    new RadioButtonAnswer { Name = "Option 3", CreateAt = DateTime.Now, ModifiedAt = DateTime.Now }
-                },
-                QuestionSections = new List<SectionQuestion>()
-            };
-
-            question.QuestionSections.Add(new SectionQuestion { QuestionId = question.Id, SectionId = sectionId });
-
-            return question;
-        }
+        public override QuestionType Type { get => QuestionType.SingleChoice; protected set { } }
 
         public void AddOption(Answer option)
         {
@@ -41,6 +19,23 @@ namespace Survey.Domain.Survey
         public void RemoveOption(Answer option)
         {
             Answers.Remove(option);
+        }
+
+        public Question Create(int sectionId, string text, string description, bool isReqired, string customErrorMessage, bool hasOtherOption, IEnumerable<string> names)
+        {
+            var question = new RadioButtonsQuestion
+            {
+                Text = text,
+                Description = description,
+                IsRequired = isReqired,
+                CustomErrorMessage = customErrorMessage,
+                Answers = names.Select(name => new RadioButtonAnswer { Name = name, CreateAt = DateTime.Now, ModifiedAt = DateTime.Now }).ToArray(),
+                QuestionSections = new List<SectionQuestion>()
+            };
+
+            question.QuestionSections.Add(new SectionQuestion { QuestionId = question.Id, SectionId = sectionId });
+
+            return question;
         }
     }
 }
