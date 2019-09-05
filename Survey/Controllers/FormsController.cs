@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Survey.Application;
-using Survey.Application.Analytics;
+using Survey.Application.Analytics.Query;
 using Survey.Application.Interfaces;
 using Survey.Application.Results.Survey;
 using Survey.Application.Strategy;
-using Survey.Domain.Analytics;
 using Survey.Domain.Survey;
 using Survey.Domain.Survey.Result;
 
@@ -22,15 +22,15 @@ namespace Survey.Controllers
     {
         private readonly ISurveyDbContext _dbContext;
         private readonly IQuestionResponseStrategy _questionResponseStrategy;
-        private readonly IAnalyticsStrategy _analyticsStrategy;
+        private readonly IMediator _mediator;
 
         public FormsController(ISurveyDbContext dbContext,
                                IQuestionResponseStrategy questionResponseStrategy,
-                               IAnalyticsStrategy analyticsStrategy)
+                               IMediator mediator)
         {
             _dbContext = dbContext;
             _questionResponseStrategy = questionResponseStrategy;
-            _analyticsStrategy = analyticsStrategy;
+            _mediator = mediator;
         }
 
         // GET api/values
@@ -117,21 +117,8 @@ namespace Survey.Controllers
         // PUT api/values/5
         [HttpGet("{id}/result/{surveyResultId}/analytics/summary")]
         public async Task<IActionResult> GetAnalytics(int id, int surveyResultId)
-        {        
-            var questions = new List<AnalyticsQuestionViewModel>();
-
-            foreach (QuestionType questionType in Enum.GetValues(typeof(QuestionType)))
-            {
-                var analitycsType = _analyticsStrategy.GetAnalyticsType(questionType);
-                if (analitycsType != null)
-                     questions.AddRange(await analitycsType.GetAnalytics(id, surveyResultId));
-            }
-
-            return Ok(new AnalyticsViewModel {
-                FormId = id,
-                Type = AnalyticsType.Summary,
-                Questions = questions 
-            });
+        {
+            return Ok(await _mediator.Send(new GetSurveyAnalyticsQuery { FormId = id, SurveyResultId = surveyResultId }));
         }
 
        

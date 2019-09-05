@@ -26,7 +26,7 @@ namespace Survey.Application.Strategy
                                    .Select(x => new { x.Question, x.SurveyResult.FormId, SurveyResultId = x.SurveyResult.Id, x.Active, x.Name })
                                            .Where(x => x.FormId == id &&
                                                x.SurveyResultId == surveyResultId &&
-                                               x.Question.Type == QuestionType.MultipleChoice &&
+                                               x.Question.Type == Type &&
                                                x.Active)
                                    .GroupBy(x => new { QuestionId = x.Question.Id, QuestionText = x.Question.Text, QuestionType = x.Question.Type })
                                    .Select(g => new AnalyticsQuestionViewModel

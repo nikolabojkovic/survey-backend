@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ using Survey.Application.Strategy;
 using Survey.Domain.Survey;
 using Survey.Extensions;
 using Survey.Persistence;
-using System;
 using System.Reflection;
 
 namespace Survey
@@ -56,6 +56,10 @@ namespace Survey
                     Assembly.Load("Survey.Domain"),
                     Assembly.Load("Survey.Application")
                 }));
+
+            services.AddMediatR(new Assembly[] {
+                    Assembly.Load("Survey.Application")
+                });
 
             services.AddSwagger();
             services.AddCors(options => {

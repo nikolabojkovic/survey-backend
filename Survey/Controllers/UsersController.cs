@@ -33,7 +33,10 @@ namespace Survey.Controllers
         [HttpPost]
         public async Task Post([FromBody] UserInputModel userInputModel)
         {
-            var user = Domain.Users.User.Create(userInputModel.Email, userInputModel.Password, userInputModel.FirstName, userInputModel.LastName);
+            var user = Domain.Users.User.Create(userInputModel.Email,
+                                                userInputModel.Password,
+                                                userInputModel.FirstName,
+                                                userInputModel.LastName);
 
             foreach(var form in userInputModel.Forms)
             {
